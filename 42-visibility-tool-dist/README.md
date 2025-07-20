@@ -1,12 +1,12 @@
 # 42 Visibility Tool
 
-🎓 Manage visibility of your 42 School projects on GitHub.
+Manage visibility of your 42 School projects on GitHub.
 
 ## Features
-- ✅ Comprehensive 42 project detection (200+ variations)
-- 🎯 Make projects private 🔒 or public 🔓
-- 📋 Select specific repositories or all at once
-- 📦 Self-contained - no dependencies required!
+- Comprehensive 42 project detection (200+ variations)
+- Make projects private or public
+- Select specific repositories or all at once
+- Self-contained - no dependencies required!
 
 ## Setup
 1. Get GitHub token: https://github.com/settings/tokens (select 'repo' scope)

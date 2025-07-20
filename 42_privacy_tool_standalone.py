@@ -240,17 +240,17 @@ def change_visibility(client: SimpleHTTPClient, repo_full_name: str, private: bo
 
 def main():
     """Main function."""
-    print("🎓 42 Project Visibility Tool v1.0")
+    print("42 Project Visibility Tool v1.0")
     print("=" * 40)
-    print("📋 Self-contained executable - no dependencies required!")
+    print("Self-contained executable - no dependencies required!")
     print()
     
     # Get token
     token = os.getenv('GITHUB_TOKEN')
     if not token:
-        print("❌ GITHUB_TOKEN environment variable not set")
+        print("Error: GITHUB_TOKEN environment variable not set")
         print()
-        print("🔧 Setup instructions:")
+        print("Setup instructions:")
         print("   1. Go to: https://github.com/settings/tokens")
         print("   2. Generate a token with 'repo' scope")
         print("   3. Set environment variable:")
@@ -265,7 +265,7 @@ def main():
         client = SimpleHTTPClient(token)
         
         # Fetch repos
-        print("📡 Fetching repositories...")
+        print("Fetching repositories...")
         all_repos = fetch_repos(client)
         
         # Find 42 projects
@@ -275,45 +275,45 @@ def main():
                 projects_42.append(repo)
         
         if not projects_42:
-            print("❌ No 42 projects found in your repositories")
-            print("🔍 Searched for common project names and '42' in repository names")
+            print("No 42 projects found in your repositories")
+            print("Searched for common project names and '42' in repository names")
             input("Press Enter to exit...")
             return
         
-        print(f"\n✅ Found {len(projects_42)} 42 projects:")
+        print(f"\nFound {len(projects_42)} 42 projects:")
         print("-" * 60)
         
         # Show all projects with numbers
         print()
         for i, repo in enumerate(projects_42, 1):
-            status = "🔒 private" if repo['private'] else "🔓 public"
+            status = "private" if repo['private'] else "public"
             print(f"{i:2}. {repo['name']:<25} {status}")
         
         public_count = sum(1 for repo in projects_42 if not repo['private'])
         private_count = len(projects_42) - public_count
         
-        print(f"\n📊 Summary: {public_count} public, {private_count} private")
+        print(f"\nSummary: {public_count} public, {private_count} private")
         
         # Choose action
-        print("\n🎯 What would you like to do?")
-        print("   1. Make repositories private 🔒")
-        print("   2. Make repositories public 🔓")
+        print("\nWhat would you like to do?")
+        print("   1. Make repositories private")
+        print("   2. Make repositories public")
         print("   3. Exit")
         
         while True:
-            action_choice = input("\n❓ Choose action (1/2/3): ").strip()
+            action_choice = input("\nChoose action (1/2/3): ").strip()
             if action_choice in ['1', '2', '3']:
                 break
-            print("❌ Invalid choice. Enter 1, 2, or 3")
+            print("Invalid choice. Enter 1, 2, or 3")
         
         if action_choice == '3':
-            print("👋 Goodbye!")
+            print("Goodbye!")
             input("Press Enter to exit...")
             return
         
         target_private = action_choice == '1'
         action_word = "private" if target_private else "public"
-        action_emoji = "🔒" if target_private else "🔓"
+        action_emoji = "(private)" if target_private else "(public)"
         
         # Filter available repositories
         if target_private:
@@ -324,21 +324,21 @@ def main():
             filter_word = "private"
         
         if not available_repos:
-            print(f"\n✅ No {filter_word} 42 projects found to make {action_word}!")
+            print(f"\nNo {filter_word} 42 projects found to make {action_word}!")
             input("Press Enter to exit...")
             return
         
-        print(f"\n🎯 Select repositories to make {action_word}:")
-        print(f"   💡 Available {filter_word} repositories:")
+        print(f"\nSelect repositories to make {action_word}:")
+        print(f"   Available {filter_word} repositories:")
         print()
         
         for i, repo in enumerate(available_repos, 1):
-            current_status = "🔒 private" if repo['private'] else "🔓 public"
+            current_status = "private" if repo['private'] else "public"
             print(f"   {i:2}. {repo['name']:<25} {current_status}")
         
-        print(f"\n   💡 Enter numbers separated by spaces (e.g., '1 3 5')")
-        print(f"   💡 Enter 'all' to select all {filter_word} repositories")
-        print(f"   💡 Press Enter to skip")
+        print(f"\n   Enter numbers separated by spaces (e.g., '1 3 5')")
+        print(f"   Enter 'all' to select all {filter_word} repositories")
+        print(f"   Press Enter to skip")
         
         # Selection process
         selected_repos = []
@@ -347,15 +347,15 @@ def main():
             # Show current selection
             if selected_repos:
                 selected_names = [repo['name'] for repo in selected_repos]
-                print(f"\n✅ Currently selected: {', '.join(selected_names)}")
+                print(f"\nCurrently selected: {', '.join(selected_names)}")
             
-            choice = input(f"\n❓ Select repositories (1-{len(available_repos)}, 'all', or Enter to continue): ").strip().lower()
+            choice = input(f"\nSelect repositories (1-{len(available_repos)}, 'all', or Enter to continue): ").strip().lower()
             
             if choice == '':
                 break
             elif choice == 'all':
                 selected_repos = available_repos.copy()
-                print(f"✅ Selected all {len(selected_repos)} {filter_word} repositories")
+                print(f"Selected all {len(selected_repos)} {filter_word} repositories")
                 break
             else:
                 try:
@@ -369,19 +369,19 @@ def main():
                             if repo not in selected_repos:
                                 selected_repos.append(repo)
                         else:
-                            print(f"❌ Invalid number: {num} (valid range: 1-{len(available_repos)})")
+                            print(f"Invalid number: {num} (valid range: 1-{len(available_repos)})")
                     
                     if selected_repos:
                         selected_names = [repo['name'] for repo in selected_repos]
-                        print(f"✅ Selected: {', '.join(selected_names)}")
+                        print(f"Selected: {', '.join(selected_names)}")
                     else:
-                        print("❌ No valid repositories selected")
+                        print("No valid repositories selected")
                         
                 except ValueError:
-                    print("❌ Invalid input. Enter numbers separated by spaces, 'all', or press Enter")
+                    print("Invalid input. Enter numbers separated by spaces, 'all', or press Enter")
         
         if not selected_repos:
-            print("❌ No repositories selected. Exiting.")
+            print("No repositories selected. Exiting.")
             input("Press Enter to exit...")
             return
         
@@ -390,7 +390,7 @@ def main():
         for repo in selected_repos:
             print(f"   • {repo['name']}")
         
-        confirm = input(f"\n❓ Proceed with making {len(selected_repos)} repositories {action_word}? (y/N): ").strip().lower()
+        confirm = input(f"\nProceed with making {len(selected_repos)} repositories {action_word}? (y/N): ").strip().lower()
         
         if confirm in ['y', 'yes']:
             print(f"\n{action_emoji} Making {len(selected_repos)} repositories {action_word}...")
@@ -401,25 +401,25 @@ def main():
             for i, repo in enumerate(selected_repos, 1):
                 print(f"   [{i}/{len(selected_repos)}] Processing {repo['name']}...", end=" ")
                 if change_visibility(client, repo['full_name'], target_private):
-                    print("✅")
+                    print("Done")
                     success_count += 1
                 else:
-                    print("❌")
+                    print("Failed")
             
-            print(f"\n🎉 Completed! {success_count}/{len(selected_repos)} repositories made {action_word}")
+            print(f"\nCompleted! {success_count}/{len(selected_repos)} repositories made {action_word}")
             
             if success_count < len(selected_repos):
                 failed_count = len(selected_repos) - success_count
-                print(f"⚠️  {failed_count} repositories failed (check permissions)")
+                print(f"Warning: {failed_count} repositories failed (check permissions)")
         else:
-            print("❌ Operation cancelled - no changes made")
+            print("Operation cancelled - no changes made")
         
         print()
         input("Press Enter to exit...")
     
     except Exception as e:
-        print(f"\n❌ Error: {e}")
-        print("\n🔧 Troubleshooting:")
+        print(f"\nError: {e}")
+        print("\nTroubleshooting:")
         print("   • Check your internet connection")
         print("   • Verify your GitHub token is valid")
         print("   • Ensure the token has 'repo' scope permissions")
